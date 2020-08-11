@@ -18,7 +18,6 @@ class ImageItem(Item):
     sex = Field()
     age = Field()
     ethnicity = Field()
-    hair_color = Field()
     emotion = Field()
     hair_color = Field()
     eye_color = Field()
