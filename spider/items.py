@@ -5,10 +5,21 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy import Item, Field
 
 
-class SpiderItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class ImageItem(Item):
+    """This class models the image elements in the response"""
+
+    # Fields of data that we want to obtain and they follow the
+    # pattern in the url /joyfull-white-young-adult-male-with-short-brown-hair-and-brown-eyes
+    image_src = Field()
+    image_data = Field()
+    sex = Field()
+    age = Field()
+    ethnicity = Field()
+    hair_color = Field()
+    emotion = Field()
+    hair_color = Field()
+    eye_color = Field()
+
