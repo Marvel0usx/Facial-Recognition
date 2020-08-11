@@ -2,29 +2,29 @@ from scrapy import Spider
 from scrapy_splash import SplashRequest
 from spider.items import ImageItem
 from bs4 import BeautifulSoup
-import re
+
+ETHNICITY = ["white", "latino", "asian", "black"]
+AGE_PREFIX = ["young", "middle"]
+AGE = ["adult", "child", "infant"]
+EYE_COLOR = ["brown", "grey", "blue", "green"]
+HAIR_COLOR = ["brown", "black", "blond", "gray"]
+EMOTION = ["joyfull", "neutral"]    # beware of this typo
+
 
 class ImageSpider(Spider):
     """Implementation of the spider that parses response"""
-    # Names should be unique in one project
-    name = "ImageSpider"
-    allowed_domains = [
-        "generated.photos"
-    ]
-    # The urls where the spider begins crawling
-    start_urls = [
-        # "https://httpbin.org/get",
-        "https://generated.photos/faces/"
-    ]
+    name = "ImageSpider"    # Unique identifier
+    allowed_domains = ["generated.photos"]
+    start_urls = ["https://generated.photos/faces/"]
 
     def __init__(self):
         self.timeout = 0.5
         self.last_visit_info = None
         self.num_to_go = 50000
-        # self.btn_click = "document.querySelector('button.loadmore-button').click()"
+        self.btn_click = "document.querySelector('button.loadmore-button').click()"
 
     def start_requests(self):
-        new_header = self.shuffle_request_header()
+        """Method that the Scrapy engine calls to dispatch http requests"""
         while self.num_to_go > 0:
             yield SplashRequest(
                 url=self.__class__.start_urls[0],
@@ -38,31 +38,39 @@ class ImageSpider(Spider):
 
     def parse(self, response):
         """Method that defines how we want to parse the response"""
-        # Obtain tags
-        if response.status == 200:
-            soup = BeautifulSoup(response._body, 'lxml')
+        if response.status != 200:
+            print(f"[Error] Response of code {response.status}")
+        else:
+            soup = BeautifulSoup(response.body, 'lxml')
             image_links = soup.select("div.card-image > a[href]")
             for link in image_links:
                 description = link["href"]
                 src = link.select_one("img")['src']
-                print(f"Getting image description: {description} via {src}")
-                yield self.encap(description, src)
-        else:
-            print(f"[Error] Response of code {response.status}")
+                print(f"Getting image description: {description} via {src}", end="\n")
 
-    def encap(self, description, src):
+            # If the button for loading is found, yield another request with the button clicked
+
+    def encapsulate(self, description, src):
+        """Method that factor out all labels from the src and encapsulate to a Scrapy item"""
         new_item = ImageItem()
-        new_item["image_src"] = src
-        self.parse_labels(new_item, description)
-        return new_item
-
-    def parse_labels(self, new_item, description):
-        # new_item["sex"], new_item["age"], new_item["ethnicity"], \
-        # new_item["emotion"], new_item["hair_color"], new_item["eye_color"]
         labels = description[6:].split("-")
         for label in labels:
-            # TODO(harry): finish label parsing
-            pass
+            if label in ETHNICITY:
+                new_item["ethnicity"] = label
+            elif label in EYE_COLOR:
+                new_item["eye_color"] = label
+            elif label in HAIR_COLOR:
+                new_item["hair_color"] = label
+            elif label in EMOTION:
+                new_item["emotion"] = label[:-1] if label == "joyfull" else label
+            if label == "young":
+                new_item["age"] = "young-adult"
+            elif label == "middle":
+                new_item["age"] = "middle-aged"
+            if "age" not in new_item and label in AGE:
+                new_item["age"] = label
+        new_item["image_src"] = src
+        return new_item
 
     @staticmethod
     def shuffle_request_header():
