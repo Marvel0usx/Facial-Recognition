@@ -22,4 +22,3 @@ class ImageItem(Item):
     emotion = Field()
     hair_color = Field()
     eye_color = Field()
-
