@@ -99,7 +99,8 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 SPIDER_MIDDLEWARES = {
-    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+    "scrapy_splash.SplashDeduplicateArgsMiddleware": 100,
+    "spider.middlewares.ProxyUADownloaderMiddleware": 150,
 }
 
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
