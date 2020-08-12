@@ -13,8 +13,8 @@ class ImageItem(Item):
 
     # Fields of data that we want to obtain and they follow the
     # pattern in the url /joyfull-white-young-adult-male-with-short-brown-hair-and-brown-eyes
-    image_src = Field()
-    image_data = Field()
+    image_urls = Field()    # Required by ImagePipeline
+    images = Field()        # Required by ImagePipeline for meta data
     sex = Field()
     age = Field()
     ethnicity = Field()

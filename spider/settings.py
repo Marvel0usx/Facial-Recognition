@@ -105,3 +105,12 @@ SPIDER_MIDDLEWARES = {
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1,
+                  'spider.pipelines.MongoDBPipeline': 300,
+                  }
+
+IMAGES_STORE = r"E:/data"
+
+MONGO_URI = "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb"
+MONGO_DB = "local"

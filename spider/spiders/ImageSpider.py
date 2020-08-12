@@ -1,4 +1,4 @@
-from scrapy import Spider
+from scrapy import Spider, Request
 from scrapy_splash import SplashRequest
 from spider.items import ImageItem
 from bs4 import BeautifulSoup
@@ -20,21 +20,19 @@ class ImageSpider(Spider):
     def __init__(self):
         self.timeout = 0.5
         self.last_visit_info = None
-        self.num_to_go = 50000
         self.btn_click = "document.querySelector('button.loadmore-button').click()"
 
     def start_requests(self):
         """Method that the Scrapy engine calls to dispatch http requests"""
-        while self.num_to_go > 0:
-            yield SplashRequest(
-                url=self.__class__.start_urls[0],
-                callback=self.parse,
-                endpoint="render.html",
-                args={
-                    'wait': self.timeout,
-                },
-                headers=ImageSpider.shuffle_request_header()
-            )
+        yield SplashRequest(
+            url=self.__class__.start_urls[0],
+            callback=self.parse,
+            endpoint="render.html",
+            args={
+                'wait': self.timeout,
+            },
+            headers=ImageSpider.shuffle_request_header()
+        )
 
     def parse(self, response):
         """Method that defines how we want to parse the response"""
@@ -47,7 +45,7 @@ class ImageSpider(Spider):
                 description = link["href"]
                 src = link.select_one("img")['src']
                 print(f"Getting image description: {description} via {src}", end="\n")
-
+                yield self.encapsulate(description, src)
             # If the button for loading is found, yield another request with the button clicked
 
     def encapsulate(self, description, src):
@@ -69,7 +67,7 @@ class ImageSpider(Spider):
                 new_item["age"] = "middle-aged"
             if "age" not in new_item and label in AGE:
                 new_item["age"] = label
-        new_item["image_src"] = src
+        new_item["image_urls"] = src
         return new_item
 
     @staticmethod
