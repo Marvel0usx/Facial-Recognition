@@ -7,7 +7,8 @@
 
 from scrapy import signals, Request
 from fake_useragent import UserAgent, FakeUserAgentError
-
+from scrapy.settings import default_settings
+from random import choice
 
 class SpiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -86,7 +87,7 @@ class ProxyUADownloaderMiddleware:
         # - return None: continue processing this exception
         # - return a Response object: stops process_exception() chain
         # - return a Request object: stops process_exception() chain
-        request.meta["proxy"] = 0 # TODO(harry): find ip's
+        request.meta["proxy"] = f"https://{choice(default_settings['PROXY_HTTPS'])}"
         return request
 
     @classmethod
