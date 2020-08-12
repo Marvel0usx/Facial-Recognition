@@ -6,7 +6,6 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import pymongo
-from scrapy import Request
 from itemadapter import ItemAdapter
 from spider.items import ImageItem
 from scrapy.exceptions import DropItem
@@ -39,7 +38,7 @@ class MongoDBPipeline:
         """This method is called for every item pipeline component."""
         image_meta = ItemAdapter(item).asdict()
         self.collection.insert_one(image_meta)
-        if not item.image_src:
+        if not item["image_urls"]:
             raise DropItem("Missing image url.")
         # Method must either return an item, raise DropItem, or return Deferred
         else:

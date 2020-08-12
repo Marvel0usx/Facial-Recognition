@@ -2,6 +2,7 @@ from scrapy import Spider, Request
 from scrapy_splash import SplashRequest
 from spider.items import ImageItem
 from bs4 import BeautifulSoup
+import re
 
 ETHNICITY = ["white", "latino", "asian", "black"]
 AGE_PREFIX = ["young", "middle"]
@@ -44,8 +45,10 @@ class ImageSpider(Spider):
             for link in image_links:
                 description = link["href"]
                 src = link.select_one("img")['src']
-                print(f"Getting image description: {description} via {src}", end="\n")
-                yield self.encapsulate(description, src)
+                if re.match(r"^(http|https)://.*\.jpg$", src):
+                    print(f"Getting image description: {description} via {src}", end="\n")
+                    yield self.encapsulate(description, src)
+
             # If the button for loading is found, yield another request with the button clicked
 
     def encapsulate(self, description, src):
@@ -67,7 +70,7 @@ class ImageSpider(Spider):
                 new_item["age"] = "middle-aged"
             if "age" not in new_item and label in AGE:
                 new_item["age"] = label
-        new_item["image_urls"] = src
+        new_item["image_urls"] = [src]
         return new_item
 
     @staticmethod
