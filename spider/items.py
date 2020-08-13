@@ -15,9 +15,11 @@ class ImageItem(Item):
     # pattern in the url /joyfull-white-young-adult-male-with-short-brown-hair-and-brown-eyes
     image_urls = Field()    # Required by ImagePipeline
     images = Field()        # Required by ImagePipeline for meta data
-    sex = Field()
+    image_id = Field()
+    gender = Field()
     age = Field()
     ethnicity = Field()
     emotion = Field()
     hair_color = Field()
+    hair_length = Field()
     eye_color = Field()

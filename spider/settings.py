@@ -90,20 +90,13 @@ ROBOTSTXT_OBEY = True
 COOKIES_ENABLED = True
 
 DOWNLOADER_MIDDLEWARES = {
-    "scrapy_splash.SplashCookiesMiddleware": 723,
-    "scrapy_splash.SplashMiddleware": 725,
     "scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware": 810,
 }
 
-# Scrapy-Splash related
-SPLASH_URL = "http://localhost:8050/"
 SPIDER_MIDDLEWARES = {
-    "scrapy_splash.SplashDeduplicateArgsMiddleware": 100,
     # Custom proxy middleware
     "spider.middlewares.ProxyUADownloaderMiddleware": 150,
 }
-DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
-HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 # Custom pipelines
 ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1,
@@ -114,7 +107,7 @@ ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1,
 IMAGES_STORE = r"E:/data"
 
 # MongoDB local instance
-MONGO_URI = "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb"
+MONGO_URI = "mongodb://127.0.0.1:27017/"
 MONGO_DB = "local"
 
 # Proxy
@@ -153,3 +146,25 @@ PROXY_HTTPS = ['162.159.242.51:80',
                '54.38.218.211:6582',
                '54.38.218.208:6582'
                ]
+
+# Spider Settings
+HEADERS = {
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+    "Authorization": "API-Key Cph30qkLrdJDkjW-THCeyA",
+    "Connection": "keep-alive",
+    "Cookie": "gp_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HVJhY2s6OlNlc3Npb246OlNlc3Npb25JZAY6D0BwdWJsaWNfaWRJIkU1OTViNDhkNmU1ZmVkNTVlNzkzOWM4ZjRhZTI5ZGQyNmZjN2FhMzVhODhiNWY5NzNiZTE2ZDEwZDkzZThjNmZlBjsARkkiDGNhcnRfaWQGOwBGSSIdNWYzNDJmODljMWE2NzEwMDBhYzkzNWEzBjsAVA%3D%3D--adbd68898f068cfc1f18708843dcd278f8f423b0; _ga=GA1.2.2135163131.1597273451; _gid=GA1.2.1518591084.1597273451",
+    "DNT": "1",
+    "Host": "api.generated.photos",
+    "Origin": "https://generated.photos",
+    "Referer": "https://generated.photos/faces/",
+    "Sec-Fetch-Dest": "empty",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Site": "same-site",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36",
+}
+
+URL = "https://api.generated.photos/api/frontend/v1/images?order_by=latest&page={}&per_page={}"
+TOTAL_PAGE = 1
+PER_PAGE = 10
