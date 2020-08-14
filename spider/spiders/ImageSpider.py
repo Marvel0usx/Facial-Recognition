@@ -35,6 +35,8 @@ class ImageSpider(Spider):
                 new_item = ImageItem()
                 new_item["image_id"] = image["id"]
                 new_item["image_urls"] = [image["transparent"]["thumb_url"]]
-                map(lambda key: new_item.__setitem__(key, image["meta"][key][0]), image.keys())
+                for key, value in image["meta"].items():
+                    new_item[key] = value
+                # map(lambda key: new_item.__setitem__(key, image["meta"][key][0]), image["meta"].keys())
                 yield new_item
                 sleep(0.05)

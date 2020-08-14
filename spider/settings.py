@@ -154,7 +154,7 @@ HEADERS = {
     "Accept-Language": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
     "Authorization": "API-Key Cph30qkLrdJDkjW-THCeyA",
     "Connection": "keep-alive",
-    "Cookie": "gp_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HVJhY2s6OlNlc3Npb246OlNlc3Npb25JZAY6D0BwdWJsaWNfaWRJIkU1OTViNDhkNmU1ZmVkNTVlNzkzOWM4ZjRhZTI5ZGQyNmZjN2FhMzVhODhiNWY5NzNiZTE2ZDEwZDkzZThjNmZlBjsARkkiDGNhcnRfaWQGOwBGSSIdNWYzNDJmODljMWE2NzEwMDBhYzkzNWEzBjsAVA%3D%3D--adbd68898f068cfc1f18708843dcd278f8f423b0; _ga=GA1.2.2135163131.1597273451; _gid=GA1.2.1518591084.1597273451",
+    "Cookie": "gp_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVG86HVJhY2s6OlNlc3Npb246OlNlc3Npb25JZAY6D0BwdWJsaWNfaWRJIkU4OTVmODZhM2VmNjU1YjAyOWQ5YzhlZjYxYzFjMGJiMDJhNDQwZjc3ZWI1MmU1YjcxODlmM2Y5MGRiZjk1M2M4BjsARkkiDGNhcnRfaWQGOwBGSSIdNWYzNWZkMDE1OWE5N2YwMDE1NWZlNjdjBjsAVA%3D%3D--acd84dae50bb50665804d7b3563468e02960376b; _ga=GA1.2.569598143.1597373702; _gid=GA1.2.976846795.1597373702; _gat=1",
     "DNT": "1",
     "Host": "api.generated.photos",
     "Origin": "https://generated.photos",
@@ -166,5 +166,5 @@ HEADERS = {
 }
 
 URL = "https://api.generated.photos/api/frontend/v1/images?order_by=latest&page={}&per_page={}"
-TOTAL_PAGE = 1
-PER_PAGE = 10
+TOTAL_PAGE = 200
+PER_PAGE = 100

@@ -23,3 +23,4 @@ class ImageItem(Item):
     hair_color = Field()
     hair_length = Field()
     eye_color = Field()
+    confidence = Field()
