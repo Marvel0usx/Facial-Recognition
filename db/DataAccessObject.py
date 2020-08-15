@@ -7,10 +7,10 @@ import pandas
 class DataAccessObject:
     """Class that wraps APIs to access MongoDB in a nicer way."""
 
-    def __init__(self, client: pymongo.MongoClient, database="", collection=""):
-        self.client = client
+    def __init__(self, host="mongodb://localhost", port=27017, database="", collection=""):
+        self.client = pymongo.MongoClient(host, port)
         # Basic assertion to ensure valid client.
-        assert client is not None
+        assert self.client is not None
         assert type(database) is str
         assert type(collection) is str
         try:
@@ -43,9 +43,7 @@ class DataAccessObject:
 
 
 if __name__ == "__main__":
-    client = pymongo.MongoClient(host="mongodb://127.0.0.1", port=27017)
-    dao = DataAccessObject(client, "local", "faceData")
-    ins = DataAccessObject(client, "local", "faceData")
+    ins = DataAccessObject(database="local", collection="faceData")
     print("get 10 images")
     print([i for i in ins.get_num_image(10)])
 
