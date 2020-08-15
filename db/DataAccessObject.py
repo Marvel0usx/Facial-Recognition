@@ -29,20 +29,24 @@ class DataAccessObject:
     def get_all_image_by_key(self, key):
         return self.collection.find({str(key), key})
 
-    def get_num_image_by_keys(self, num=100, **keys):
-        return self.collection.find(keys).limit(num)
+    def get_num_image_by_keys(self, num=100, **y):
+        return self.collection.find(y).limit(num)
 
-    def partition_dataset(self, training, testing, num):
-        if num:
-            count = num
-        else:
-            count = self.collection.count_documents({})
+    def partition_dataset(self, training, testing, size, **y):
         assert training + testing <= 1
-        training_size = round(count * training)
-        testing_size = round(count * testing)
+        size = size if size else self.collection.count_documents({})
+        training_size = round(training * size)
+        testing_size = round(testing * size)
+        return self.get_X_y_pair(training_size, skip=0, **y), self.get_X_y_pair(testing_size, skip=training_size, **y), training_size, testing_size
 
-        return self.collection.find({}).limit(training_size),\
-                self.collection.find({}).skip(training_size).limit(testing_size)
+    def get_X_y_pair(self, size, skip, **y):
+        return self.collection.find({}, {"pixels": 1, "_id": 0, **y}).skip(skip).limit(size)
+
+    def get_X(self, size, skip=0):
+        return self.collection.find({}, {"pixels": 1, "_id": 0}).skip(skip).limit(size)
+
+    def get_y(self, size, skip=0, **y):
+        return self.collection.find({}, {**y, "_id": 0}).skip(skip).limit(size)
 
 
 if __name__ == "__main__":
