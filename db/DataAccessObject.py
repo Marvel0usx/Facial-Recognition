@@ -32,8 +32,11 @@ class DataAccessObject:
     def get_num_image_by_keys(self, num=100, **keys):
         return self.collection.find(keys).limit(num)
 
-    def partition_dataset(self, training, testing):
-        count = self.collection.count_documents({})
+    def partition_dataset(self, training, testing, num):
+        if num:
+            count = num
+        else:
+            count = self.collection.count_documents({})
         assert training + testing <= 1
         training_size = round(count * training)
         testing_size = round(count * testing)
