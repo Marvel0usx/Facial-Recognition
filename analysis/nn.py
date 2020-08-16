@@ -8,8 +8,8 @@ random.seed(0)
 
 VERBOSE = True
 SIZE = 20000
-PATH = r"E:/data"
-
+PATH = r"E:/data/nn_ethnicity.dat"
+Y = "ethnicity"
 
 def print_(*args, **kwargs):
     if VERBOSE:
@@ -20,7 +20,7 @@ def print_(*args, **kwargs):
 
 # Initialize connection to database.
 db = DataAccessObject(database="local", collection="grayscale")
-training_cursor, testing_cursor, training_size, testing_size = db.partition_dataset(0.8, 0.2, SIZE, gender=1)
+training_cursor, testing_cursor, training_size, testing_size = db.partition_dataset(0.8, 0.2, SIZE, **{Y: 1})
 print_(f"----- Retrieving Data from MongoDB -----\n" + \
       f"Training set has {training_size} documents\n" +\
       f"Testing set has {testing_size} documents\n")
@@ -34,10 +34,10 @@ testing_y = []
 
 for doc in training_cursor:
     training_X.append(doc["pixels"])
-    training_y.append(doc["gender"])
+    training_y.append(doc[Y])
 for doc in testing_cursor:
     testing_X.append(doc["pixels"])
-    testing_y.append(doc["gender"])
+    testing_y.append(doc[Y])
 
 training_X = np.array(training_X)
 training_y = np.array(training_y)
@@ -70,7 +70,7 @@ print_(f"Testing score: {nn.score(testing_X, testing_y)}\n")
 
 
 def store():
-    with open("nn.dat", "wb") as fd:
+    with open(PATH, "wb") as fd:
         try:
             pickle.dump(nn, fd)
         except pickle.PicklingError as e:
@@ -84,4 +84,4 @@ def store():
 
 print_("----- Serialization -----")
 store()
-print_(f"Trained neural network is Pickled in {PATH}/nn.dat")
+print_(f"Trained neural network is Pickled in {PATH}")
