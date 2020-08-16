@@ -5,6 +5,7 @@ import numpy as np
 import tkinter as tk
 from threading import Thread, Event
 from time import sleep
+import imutils
 
 NN_PATH = r"E:/programming/Python/Current/week2project/analysis/"
 
@@ -15,6 +16,8 @@ class FaceRecognizer:
         self.nn_ethnicity = pickle.load(open(NN_PATH + "nn_ethnicity.dat", "rb"))
         self.nn_gender = pickle.load(open(NN_PATH + "nn_gender.dat", "rb"))
         self.cv = cv2.VideoCapture(0)    # 0 for external camera
+        self.cv.set(cv2.CAP_PROP_FRAME_WIDTH, 512)
+        self.cv.set(cv2.CAP_PROP_FRAME_HEIGHT, 512)
         self.root = tk.Tk()
         self.root.geometry("550x580")
         self.root.title("Face Recognizer v1.0.0")
@@ -62,9 +65,20 @@ class FaceRecognizer:
     def analysis(self):
         image = self.curr_image
         image = image.convert("L")
-        image = image.thumbnail((64, 64), Image.ANTIALIAS)
+        width, height = image.size  # Get dimensions
+
+        # Crop image.
+        new_height = new_width = 512
+        left = (width - new_width) / 2
+        top = (height - new_height) / 2
+        right = (width + new_width) / 2
+        bottom = (height + new_height) / 2
+
+        # Crop the center of the image
+        image = image.crop((left, top, right, bottom))
+        image.thumbnail((64, 64), Image.ANTIALIAS)
         X = [image.getpixel((j, i)) for i in range(64) for j in range(64)]
-        X = np.array(X)
+        X = np.array([X])
 
         y_hat_gender = self.nn_gender.predict(X)
         y_hat_age = self.nn_age.predict(X)
