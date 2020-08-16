@@ -84,7 +84,7 @@ class FaceRecognizer:
         y_hat_age = self.nn_age.predict(X)
         y_hat_ethnicity = self.nn_ethnicity.predict(X)
 
-        self.predict.set(f"Gender: {y_hat_gender}\tAge: {y_hat_age}\tEthnicity: {y_hat_ethnicity}")
+        self.predict.set(f"Gender: {y_hat_gender[0]}    Age: {y_hat_age[0]}    Ethnicity: {y_hat_ethnicity[0]}")
 
 
 if __name__ == "__main__":
