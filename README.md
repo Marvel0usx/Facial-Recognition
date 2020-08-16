@@ -15,7 +15,7 @@ Initialize project: `scrapy startproject mySpider`
 
 Start scraping: `scrapy runspider mySpider.py`
 
-![scrapy_architecture](demo\scrapy_architecture.png)
+<img src="demo\scrapy_architecture.png" alt="scrapy_arch" style="zoom:50%;float:left" />
 
 ### Dataset
 
@@ -42,11 +42,11 @@ Please contact me to acquire the dataset :)
 
 - Identify age
 
-  ![age](demo\age.jpg)
+  <img src="demo\age.jpg" alt="age" style="zoom:50%;float:left" />
 
 - Identify ethnicity
 
-  ![ethnicity](demo\ethnicity.jpg)
+  <img src="demo\ethnicity.jpg" alt="ethnicity" style="zoom:50%;float:left" />
 
 ## Demo
 
