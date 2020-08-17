@@ -23,7 +23,7 @@ The dataset is obtained from scraping the page https://generated.photos/faces/. 
 
 | key         | type      | note                                                         |
 | ----------- | --------- | ------------------------------------------------------------ |
-| pixels      | List[$x$] | $x \in [0, 255]$                                             |
+| pixels      | List[<img src="https://render.githubusercontent.com/render/math?math=x">] | <img src="https://render.githubusercontent.com/render/math?math=x \in [0, 255]">|
 | gender      | str       | gender $\in \{\text{male}, \text{female}\}$                  |
 | age         | str       | age $\in \{\text{infant}, \text{young-adult}, \text{adult}, \text{middle-aged}\}$ |
 | ethnicity   | str       | ethnicity $\in \{\text{asian}, \text{black}, \text{latino}, \text{white}\}$ |
