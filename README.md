@@ -23,14 +23,14 @@ The dataset is obtained from scraping the page https://generated.photos/faces/. 
 
 | key         | type      | note                                                         |
 | ----------- | --------- | ------------------------------------------------------------ |
-| pixels      | List[<img src="https://render.githubusercontent.com/render/math?math=x">] | <img src="https://render.githubusercontent.com/render/math?math=x \in [0, 255]">|
-| gender      | str       | gender $\in \{\text{male}, \text{female}\}$                  |
-| age         | str       | age $\in \{\text{infant}, \text{young-adult}, \text{adult}, \text{middle-aged}\}$ |
-| ethnicity   | str       | ethnicity $\in \{\text{asian}, \text{black}, \text{latino}, \text{white}\}$ |
-| emotion     | str       | emotion $\in \{\text{joy}, \text{neutral}\}$                 |
-| hair_color  | str       | hair_color $\in \{ \text{brown}, \text{black}, \text{gray}, \text{blond}\}$ |
-| eye_color   | str       | eye_color $\in \{ \text{brown}, \text{blue}, \text{gray}, \text{green}\}$ |
-| hair_length | str       | hair_length $\in \{ \text{short}, \text{medium}, \text{long}\}$ |
+| pixels      | List[<img src="https://render.githubusercontent.com/render/math?math=x">] | <img src="https://render.githubusercontent.com/render/math?math=x \in [0, 255]"> |
+| gender      | str       | gender <img src="https://render.githubusercontent.com/render/math?math=\in \{\text{male}, \text{female}\}"> |
+| age         | str       | age <img src="https://render.githubusercontent.com/render/math?math=\in \{\text{infant}, \text{young-adult}, \text{adult}, \text{middle-aged}\}">|
+| ethnicity   | str       | ethnicity <img src="https://render.githubusercontent.com/render/math?math=\in \{\text{asian}, \text{black}, \text{latino}, \text{white}\}"> |
+| emotion     | str       | emotion <img src="https://render.githubusercontent.com/render/math?math=\in \{\text{joy}, \text{neutral}\}"> |
+| hair_color  | str       | hair_color <img src="https://render.githubusercontent.com/render/math?math=\in \{ \text{brown}, \text{black}, \text{gray}, \text{blond}\}"> |
+| eye_color   | str       | eye_color <img src="https://render.githubusercontent.com/render/math?math=\in \{ \text{brown}, \text{blue}, \text{gray}, \text{green}\}"> |
+| hair_length | str       | hair_length <img src="https://render.githubusercontent.com/render/math?math=\in \{ \text{short}, \text{medium}, \text{long}\}"> |
 
 Please contact me to acquire the dataset :)
 
