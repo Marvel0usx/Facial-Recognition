@@ -59,10 +59,10 @@ def confusion_matrix(y_hat, y_truth, criterion):
 def plot_confusion_matrix(true_negative, false_positive, false_negative, true_positive, axis_labels=[]):
     total = true_positive + false_positive
     data = np.array([[true_negative, false_positive], [false_negative, true_positive]])
-    labels = np.asarray([f"True Neg\n{true_negative}\n{true_negative/total:.2%}",
-                         f"False Pos\n{false_positive}\n{false_positive/total:.2%}",
-                         f"False Neg\n{false_negative}\n{false_negative/total:.2%}",
-                         f"True Pos\n{true_positive}\n{true_positive/total:.2%}"]
+    labels = np.asarray([f"True Neg\n{true_negative}\n{true_negative / total:.2%}",
+                         f"False Pos\n{false_positive}\n{false_positive / total:.2%}",
+                         f"False Neg\n{false_negative}\n{false_negative / total:.2%}",
+                         f"True Pos\n{true_positive}\n{true_positive / total:.2%}"]
                         ).reshape((2, 2))
     fig = sns.heatmap(data, annot=labels, xticklabels=axis_labels, yticklabels=axis_labels,
                       fmt="", cmap="Blues").get_figure()
@@ -73,19 +73,40 @@ true_positive, false_positive, true_negative, false_negative = confusion_matrix(
 
 plot_confusion_matrix(true_negative, false_positive, false_negative, true_positive, ["male", "female"])
 
+
 # Calculate for McFadden's pseudo R-squared
-def generate_nn_null(y):
-    """Function to train a dummy logistic regression with only intercept."""
-    nn_null = LogisticRegression()
-    dim = (len(y), 64 * 64)
-    nn_null.fit(np.ones(dim), y)
-    return nn_null
+def logit(x, w):
+    return 1 / (1 + np.exp(-np.dot(x, w.T)))
 
-def trained_nn_log_likelihood(w, X, y):
-    pass
 
-def null_nn_log_likelihood(w, X, y):
-    pass
+def lc_log_likelihood(w, X, y):
+    """Function that calculates for the log-likelihood of a linear regression model."""
+    log_likelihood = 0
+    for idx in range(len(y)):
+        log_likelihood += y[idx] * np.log(logit(X[idx], w)) + (1 - y[idx]) * np.log(1 - logit(X[idx], w))
+    return log_likelihood
 
-def mcfadden_rsquared(nn_trained, nn_null, X, y):
-    np.sum()
+
+def mcfadden_rsquared(trained_weight, null_weight, X, y):
+    trained_log_likelihood = lc_log_likelihood(trained_weight, X, y)
+    null_log_likelihood = lc_log_likelihood(null_weight, X, y)
+    return 1.0 - (trained_log_likelihood / null_log_likelihood)
+
+
+y_for_log_likelihood = [0 if g == "male" else 1 for g in y_gender]
+# print(mcfadden_rsquared(nn_gender.coef_, np.array([w if i == 0 else 0.0 for i, w in enumerate(nn_gender.coef_)]),
+#                         X, y_for_log_likelihood))
+
+def full_log_likelihood(w, X, y):
+    score = np.dot(X, w).reshape(1, X.shape[0])
+    return np.sum(-np.log(1 + np.exp(score))) + np.sum(y * score)
+
+def null_log_likelihood(w, X, y):
+    z = np.array([w if i == 0 else 0.0 for i, w in enumerate(w.reshape(1, X.shape[1])[0])]).reshape(X.shape[1], 1)
+    score = np.dot(X, z).reshape(1, X.shape[0])
+    return np.sum(-np.log(1 + np.exp(score))) + np.sum(y * score)
+
+def mcfadden_rsquare(w, X, y):
+    return 1.0 - (full_log_likelihood(w, X, y) / null_log_likelihood(w, X, y))
+
+print(mcfadden_rsquare(nn_gender.coef_.T, X, np.array(y_for_log_likelihood)))
