@@ -28,7 +28,7 @@ for image_meta in face_meta_raw:
         continue
     image_core = Image.open(image_full_path)
     width, height = image_core.size
-    pixels = [image_core.getpixel((j, i)) if image_core.getpixel((j, i)) != 255 else 0 for i in range(height) for j in range(width)]
+    pixels = [image_core.getpixel((j, i)) for i in range(height) for j in range(width)]
     # Aggregate result as a document in new collection.
     new_doc = {
         "pixels": pixels,
