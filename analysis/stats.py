@@ -6,6 +6,7 @@ import pickle
 
 PATH = "./"
 
+# Preparing data and trained models.
 nn_gender = pickle.load(open(PATH + "nn_gender.dat", "rb"))
 nn_age = pickle.load(open(PATH + "nn_age.dat", "rb"))
 nn_ethnicity = pickle.load(open(PATH + "nn_ethnicity.dat", "rb"))
@@ -69,44 +70,33 @@ def plot_confusion_matrix(true_negative, false_positive, false_negative, true_po
     fig.savefig("confusion_matrix.png")
 
 
-true_positive, false_positive, true_negative, false_negative = confusion_matrix(y_hat_gender, y_gender, "female")
-
-plot_confusion_matrix(true_negative, false_positive, false_negative, true_positive, ["male", "female"])
-
-
 # Calculate for McFadden's pseudo R-squared
 def logit(x, w):
     return 1 / (1 + np.exp(-np.dot(x, w.T)))
 
 
-def lc_log_likelihood(w, X, y):
-    """Function that calculates for the log-likelihood of a linear regression model."""
-    log_likelihood = 0
+def log_likelihood(w, X, y):
+    """Function that calculates for the log-likelihood given weight, X, and y."""
+    ll = 0
     for idx in range(len(y)):
-        log_likelihood += y[idx] * np.log(logit(X[idx], w)) + (1 - y[idx]) * np.log(1 - logit(X[idx], w))
-    return log_likelihood
+        proba = np.power(logit(X[idx], w), y[idx]) + np.power((1 - logit(X[idx], w)), 1 - y[idx])
+        ll += proba
+    return ll
 
 
 def mcfadden_rsquared(trained_weight, null_weight, X, y):
-    trained_log_likelihood = lc_log_likelihood(trained_weight, X, y)
-    null_log_likelihood = lc_log_likelihood(null_weight, X, y)
+    trained_log_likelihood = log_likelihood(trained_weight, X, y)
+    null_log_likelihood = log_likelihood(null_weight, X, y)
     return 1.0 - (trained_log_likelihood / null_log_likelihood)
 
 
-y_for_log_likelihood = [0 if g == "male" else 1 for g in y_gender]
-# print(mcfadden_rsquared(nn_gender.coef_, np.array([w if i == 0 else 0.0 for i, w in enumerate(nn_gender.coef_)]),
-#                         X, y_for_log_likelihood))
+if __name__ == "__main__":
+    # Plot confusion matrix.
+    # true_positive, false_positive, true_negative, false_negative = confusion_matrix(y_hat_gender, y_gender, "female")
+    # plot_confusion_matrix(true_negative, false_positive, false_negative, true_positive, ["male", "female"])
 
-def full_log_likelihood(w, X, y):
-    score = np.dot(X, w).reshape(1, X.shape[0])
-    return np.sum(-np.log(1 + np.exp(score))) + np.sum(y * score)
-
-def null_log_likelihood(w, X, y):
-    z = np.array([w if i == 0 else 0.0 for i, w in enumerate(w.reshape(1, X.shape[1])[0])]).reshape(X.shape[1], 1)
-    score = np.dot(X, z).reshape(1, X.shape[0])
-    return np.sum(-np.log(1 + np.exp(score))) + np.sum(y * score)
-
-def mcfadden_rsquare(w, X, y):
-    return 1.0 - (full_log_likelihood(w, X, y) / null_log_likelihood(w, X, y))
-
-print(mcfadden_rsquare(nn_gender.coef_.T, X, np.array(y_for_log_likelihood)))
+    # Compute pseudo r-squared
+    y_for_log_likelihood = [0 if g == "male" else 1 for g in y_gender]
+    null_weight = np.array([1.0 if i == 0 else 0.0 for i in range(X.shape[1])])
+    mcfadden_rsquared(nn_gender.coef_, null_weight, X, y_for_log_likelihood)
+    # Result: 0.31467801, where value from 0.2-0.4 is excellent fit!!
