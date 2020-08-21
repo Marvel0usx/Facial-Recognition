@@ -1,6 +1,7 @@
 import numpy as np
 import seaborn as sns
 from db.DataAccessObject import DataAccessObject
+from sklearn.metrics import roc_curve, roc_auc_score
 from sklearn.linear_model import LogisticRegression
 import pickle
 
@@ -90,13 +91,34 @@ def mcfadden_rsquared(trained_weight, null_weight, X, y):
     return 1.0 - (trained_log_likelihood / null_log_likelihood)
 
 
+# ROC-AUC Curve
+def plot_roc(nn: LogisticRegression, X, y_truth, pos_label, title):
+    # Calculate for score of this model based on X.
+    y_predicted_prob = nn.predict_proba(X)
+    y_predicted_prob = np.array([p[0] for p in y_predicted_prob])
+    fpr, tpr, threshold = roc_curve(y_truth, y_predicted_prob, pos_label=pos_label)
+    roc_auc = roc_auc_score(y_truth, y_predicted_prob)
+    roc_plot = sns.lineplot(x="False Positive Rate", y="True Positive Rate", data={"False Positive Rate": fpr, "True Positive Rate": tpr})
+    roc_plot.set_title(title + f"\nAUC: {roc_auc}")
+    roc_plot.set_xlabel("False Positive Rate")
+    roc_plot.set_ylabel("True Positive Rate")
+    fig = roc_plot.get_figure()
+    fig.savefig(f"{title}.png")
+
+
 if __name__ == "__main__":
     # Plot confusion matrix.
     # true_positive, false_positive, true_negative, false_negative = confusion_matrix(y_hat_gender, y_gender, "female")
     # plot_confusion_matrix(true_negative, false_positive, false_negative, true_positive, ["male", "female"])
 
     # Compute pseudo r-squared
-    y_for_log_likelihood = [0 if g == "male" else 1 for g in y_gender]
-    null_weight = np.array([1.0 if i == 0 else 0.0 for i in range(X.shape[1])])
-    mcfadden_rsquared(nn_gender.coef_, null_weight, X, y_for_log_likelihood)
+    # y_numeric = [0 if g == "male" else 1 for g in y_gender]
+    # null_weight = np.array([1.0 if i == 0 else 0.0 for i in range(X.shape[1])])
+    # mcfadden_rsquared(nn_gender.coef_, null_weight, X, y_numeric)
     # Result: 0.31467801, where value from 0.2-0.4 is excellent fit!!
+
+    # Create ROC
+    plot_roc(nn_gender, X, y_gender, pos_label="female", title="ROC for nn_gender")
+
+    for feature in ("gender", "age", "ethnicity"):
+        pass
