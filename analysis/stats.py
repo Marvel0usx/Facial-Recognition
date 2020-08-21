@@ -1,7 +1,7 @@
 import numpy as np
 import seaborn as sns
 from db.DataAccessObject import DataAccessObject
-from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.metrics import roc_curve, roc_auc_score, auc
 from sklearn.linear_model import LogisticRegression
 import pickle
 
@@ -97,7 +97,7 @@ def plot_roc(nn: LogisticRegression, X, y_truth, pos_label, title):
     y_predicted_prob = nn.predict_proba(X)
     y_predicted_prob = np.array([p[0] for p in y_predicted_prob])
     fpr, tpr, threshold = roc_curve(y_truth, y_predicted_prob, pos_label=pos_label)
-    roc_auc = roc_auc_score(y_truth, y_predicted_prob)
+    roc_auc = roc_auc_score([1 if p == pos_label else 0 for p in y_truth], y_predicted_prob)
     roc_plot = sns.lineplot(x="False Positive Rate", y="True Positive Rate", data={"False Positive Rate": fpr, "True Positive Rate": tpr})
     roc_plot.set_title(title + f"\nAUC: {roc_auc}")
     roc_plot.set_xlabel("False Positive Rate")
