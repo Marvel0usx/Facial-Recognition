@@ -1,9 +1,9 @@
 # Facial Recognition - An experiment with Logistic Regression
-Using logistic regression model to solve some real-world problems, we can explorer different possibilities and outcomes.
+Using a logistic regression model to solve some real-world problems, we can explore different possibilities and outcomes.
 
 ### Question Answered by Logistic Regression
 
-Similar to linear regression, logistic regression maps elements in the input space the to discrete outputs. It answers what the (log odds of) probability that an array of grayscale pixels from human face represents a certain gender, age, and ethnicity.
+Similar to linear regression, logistic regression maps elements in the input space to discrete outputs. It answers what the (log odds of) probability that an array of grayscale pixels from the human face represents a specific gender, age, and ethnicity.
 
 ### Alternative
 
@@ -20,14 +20,14 @@ Start scraping: `scrapy runspider mySpider.py`
 <img src="demo\scrapy_architecture.png" alt="scrapy_arch" style="zoom:50%;float:left" />
 
 - Spiders are responsible for propagating requests and parse the response to *item*;
-- Requests are send to remote server with random user-agent;
-- Pipelines receives parsed items and process them one-by-one, and this is where the data are stored to MongoDB;
+- Requests are sent to the remote server with random user-agent;
+- Pipelines receive parsed items and process them one-by-one, and this is where the data are stored to MongoDB;
 - Items with `images_url` are captured by `ImagesPipeline`, and sent to `ProxyUADownloaderMiddleware` ;
-- Rejected downloading requests are resend using different proxies from the IP pool;
+- Rejected downloading requests are resent using different proxies from the IP pool;
 
 ### Dataset
 
-The dataset is obtained from scraping the page https://generated.photos/faces/. The images are downloaded, stored in *MongoDB* and to reduce the pressure to my laptop, they are resized to 64x64 and made into grayscale. Labels are extracted from the link to image, and they're stored along with the link to image. The outline of the database is shown below. (key resembles what is in the dataset)
+The dataset is obtained from scraping the page https://generated.photos/faces/. The images are downloaded, stored in *MongoDB* and to reduce the pressure to my laptop, they are resized to 64x64 and made into grayscale. Labels are extracted from the link to the image, and they're stored along with the link to the image. The outline of the database is shown below. (key resembles what is in the dataset)
 
 | key         | type      | note                                                         |
 | ----------- | --------- | ------------------------------------------------------------ |
@@ -75,8 +75,11 @@ The McFadden's rho-squared is shown as follow:
 and for the theta null, we set it to be an array of all zeros except for the leading one.
 
 ```
-McFadden's pseudo R-squared: 0.31467801021392716
+McFadden's pseudo-R-squared: 0.31467801021392716
 ```
+
+#### Interpretation
+In the book - Bahvioural Travel Modelling, edited by David Hensher and Peter Stopher, 1979 - McFadden contributed Ch. 15, "Quantitative Methods for Analyzing Travel Behaviour on Individuals: Some Recent Developments." Discussion of model evaluation (in the context of multinomial logit models) begins on page 306, where he introduces ρ2 (McFadden's pseudo R2). McFadden states, "while the R2 index is a more familiar concept to planners who are experienced in OLS, it is not as well behaved as the ρ2 measure, for ML estimation. Those unfamiliar with ρ2 should be forewarned that its values tend to be considerably lower than those of the R2 index... For example, values of 0.2 to 0.4 for ρ2 represent EXCELLENT fit."
 
 ### ROC-AUC
 
@@ -93,7 +96,6 @@ Run `python visualizer.py` to discover!
 
 ### Further Improvement
 
-- Train with RGB data since it has better result in predicting *eye_color*, *hair_color*, and *ethnicity*.
+- Train with RGB data since it has a better result in predicting *eye_color*, *hair_color*, and *ethnicity*.
 - Try using `scrapy_splash` to render JS.
 - Implement a decision tree for the same sake.
-
