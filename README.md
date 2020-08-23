@@ -46,15 +46,15 @@ Please contact me to acquire the dataset :)
 
 - Identify gender
 
-  <img src="demo\gender.jpg" alt="gender" style="zoom:50%;float:left" />
+  <img src="demo\gender.jpg" alt="gender" style="width:50%; float:left" />
 
 - Identify age
 
-  <img src="demo\age.jpg" alt="age" style="zoom:50%;float:left" />
+  <img src="demo\age.jpg" alt="age" style="width:50%; float:left" />
 
 - Identify ethnicity
 
-  <img src="demo\ethnicity.jpg" alt="ethnicity" style="zoom:50%;float:left" />
+  <img src="demo\ethnicity.jpg" alt="ethnicity" style="width:50%; float:left" />
 
 ## Model Analysis
 
