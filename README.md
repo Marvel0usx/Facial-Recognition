@@ -71,8 +71,7 @@ Please contact me to acquire the dataset :)
 
 The McFadden's rho-squared is shown as follow:
 
-$\rho^2 = 1 - \frac{lnL(\theta_{trained})}{lnL(\theta_{null})}$
-
+<img src="https://render.githubusercontent.com/render/math?math=\rho^2 = 1 - \frac{lnL(\theta_{trained})}{lnL(\theta_{null})}">
 and for the theta null, we set it to be an array of all zeros except for the leading one.
 
 ```
