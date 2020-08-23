@@ -15,7 +15,15 @@ Initialize project: `scrapy startproject mySpider`
 
 Start scraping: `scrapy runspider mySpider.py`
 
+#### Mechanism of Scrapy
+
 <img src="demo\scrapy_architecture.png" alt="scrapy_arch" style="zoom:50%;float:left" />
+
+- Spiders are responsible for propagating requests and parse the response to *item*;
+- Requests are send to remote server with random user-agent;
+- Pipelines receives parsed items and process them one-by-one, and this is where the data are stored to MongoDB;
+- Items with `images_url` are captured by `ImagesPipeline`, and sent to `ProxyUADownloaderMiddleware` ;
+- Rejected downloading requests are resend using different proxies from the IP pool;
 
 ### Dataset
 
@@ -47,6 +55,38 @@ Please contact me to acquire the dataset :)
 - Identify ethnicity
 
   <img src="demo\ethnicity.jpg" alt="ethnicity" style="zoom:50%;float:left" />
+
+## Model Analysis
+
+### Confusion Matrix
+
+<img src="demo/cm_gender.png" alt="image-20200823071056966" style="zoom: 80%; float: left" />
+
+#### Interpretation
+
+- Out of 20000 pairs of tests, the model correctly predicts 97.24% of them.
+- This set of data is not biased in gender.
+
+### McFadden's Rho-squared
+
+The McFadden's rho-squared is shown as follow:
+
+$\rho^2 = 1 - \frac{lnL(\theta_{trained})}{lnL(\theta_{null})}$
+
+and for the theta null, we set it to be an array of all zeros except for the leading one.
+
+```
+McFadden's pseudo R-squared: 0.31467801021392716
+```
+
+### ROC-AUC
+
+<img src="demo/roc_gender.png" alt="image-20200823071248297" style="zoom: 80%;" /> 
+
+#### Interpretations
+
+- The closer the curve is to the upper-left corner, the better performance the model does; This is because we want the model to have a higher TPR while having a lower FPR.
+- The closer the AUC to 1, the better the prediction this model can do.
 
 ## Demo
 
